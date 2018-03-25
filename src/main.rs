@@ -10,6 +10,8 @@ fn main() {
 
     check_manifest_str_field(&["package", "description"], |_| good!("Description is set")).unwrap();
     check_manifest_str_field(&["package", "license"], |license| good!("License: {}", license)).unwrap();
+    check_manifest_str_field(&["package", "documentation"], |url| good!("Documentation: {}", url)).unwrap();
+    check_manifest_str_field(&["package", "repository"], |url| good!("Repository: {}", url)).unwrap();
 
     println!();
 }
