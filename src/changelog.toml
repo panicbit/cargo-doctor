@@ -1,5 +1,6 @@
 
 [unreleased]
 added = [
-    "diagnostic for missing Cargo.toml license field"
+    "diagnostic for missing Cargo.toml license field",
+    "diagnostic for missing Cargo.toml description field",
 ]

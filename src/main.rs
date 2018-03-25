@@ -8,23 +8,30 @@ use util::*;
 fn main() {
     println!();
 
-    check_license().unwrap();
+    check_manifest_str_field(&["package", "description"], |_| good!("Description is set")).unwrap();
+    check_manifest_str_field(&["package", "license"], |license| good!("License: {}", license)).unwrap();
 
     println!();
 }
 
-fn check_license() -> Result<()> {
+fn check_manifest_str_field<F>(path: &[&str], check: F) -> Result<()>
+where
+    F: FnOnce(&str)
+{
     let manifest = manifest()?;
+    let name = path.join(".");
 
-    let license = manifest.data.as_table()
-        .get("package").and_then(|f| f.as_table())
-        .and_then(|package| package.get("license"))
-        .map(|l| l.as_str());
+    let value = path.iter().fold(Some(&manifest.data.root), |entry, key| {
+        entry
+            .and_then(|entry| entry.as_table())
+            .and_then(|entry| entry.get(key))
+    })
+    .map(|entry| entry.as_str());
 
-    match license {
-        Some(Some(license)) => good!("License is: {}", license),
-        Some(None) => bad!("License field in Cargo.toml is not a string"),
-        None => bad!("License field in Cargo.toml is not set"),
+    match value {
+        Some(Some(value)) => check(value),
+        Some(None) => bad!("Field '{}' in Cargo.toml is not a string", name),
+        None => bad!("Field '{}' in Cargo.toml is not set", name),
     }
 
     Ok(())
