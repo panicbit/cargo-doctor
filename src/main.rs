@@ -1,4 +1,5 @@
 extern crate cargo_edit;
+extern crate toml_edit;
 extern crate failure;
 
 #[macro_use]
@@ -23,12 +24,8 @@ where
     let manifest = manifest()?;
     let name = path.join(".");
 
-    let value = path.iter().fold(Some(&manifest.data.root), |entry, key| {
-        entry
-            .and_then(|entry| entry.as_table())
-            .and_then(|entry| entry.get(key))
-    })
-    .map(|entry| entry.as_str());
+    let value = manifest.get_path(path)
+        .map(|entry| entry.as_str());
 
     match value {
         Some(Some(value)) => check(value),
