@@ -1,0 +1,8 @@
+[package]
+name = "cargo-doctor"
+version = "0.1.0"
+authors = ["panicbit <panicbit.dev@gmail.com>"]
+
+[dependencies]
+cargo-edit = "0.3.0-beta.1"
+failure = "0.1.1"

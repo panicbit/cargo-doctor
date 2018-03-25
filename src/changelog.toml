@@ -1,0 +1,5 @@
+
+[unreleased]
+added = [
+    "diagnostic for missing Cargo.toml license field"
+]
